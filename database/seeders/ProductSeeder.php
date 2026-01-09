@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Tenants\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
@@ -17,6 +16,6 @@ class ProductSeeder extends Seeder
     {
         // DB::statement('SET FOREIGN_KEY_CHECKS=0');
         // Product::truncate();
-        // Product::factory()->create();
+        Product::factory()->count(10)->create();
     }
 }
