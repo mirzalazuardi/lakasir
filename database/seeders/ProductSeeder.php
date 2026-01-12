@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
         Product::truncate();
 
         // Get data from Excel file
-        $excelFile = base_path('LIST_HARGA_BARANG_JUAL.xlsx');
+        $excelFile = base_path('SISTEM.xlsx');
 
         if (file_exists($excelFile)) {
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
@@ -49,8 +49,13 @@ class ProductSeeder extends Seeder
 
                 // Skip the header row and process products
                 foreach ($sheetData as $rowIndex => $row) {
-                    // Skip header rows and empty rows
-                    if ($rowIndex === 0 || empty($row[1]) || $row[1] === 'Nama Produk' || is_null($row[1])) {
+                    // Skip header row (row 0)
+                    if ($rowIndex === 0) {
+                        continue;
+                    }
+
+                    // Skip if product name is empty
+                    if (empty($row[1]) || is_null($row[1])) {
                         continue;
                     }
 
@@ -61,19 +66,11 @@ class ProductSeeder extends Seeder
                         continue;
                     }
 
-                    // Determine selling price based on sheet structure
-                    // Some sheets have: No, Nama Produk, Harga Jual strip, Harga Jual Satuan
-                    // Some sheets have: No, Nama Produk, Harga Jual Satuan
-                    // Some sheets have: No, Nama Produk, Harga Jual Satuan, Harga Jual Renceng
+                    // Get initial price (HARGA BELI) from column 2
+                    $initialPrice = isset($row[2]) && is_numeric($row[2]) ? $row[2] : 0;
 
-                    $sellingPrice = 0;
-
-                    // Try to get selling price from different column positions
-                    if (isset($row[2]) && is_numeric($row[2])) {
-                        $sellingPrice = $row[2];
-                    } elseif (isset($row[3]) && is_numeric($row[3])) {
-                        $sellingPrice = $row[3];
-                    }
+                    // Get selling price (HARGA JUAL) from column 3
+                    $sellingPrice = isset($row[3]) && is_numeric($row[3]) ? $row[3] : 0;
 
                     // Skip if no valid selling price
                     if ($sellingPrice <= 0) {
@@ -85,7 +82,7 @@ class ProductSeeder extends Seeder
                         'category_id' => $category->id,
                         'name' => $productName,
                         'stock' => 0,
-                        'initial_price' => 0,
+                        'initial_price' => $initialPrice,
                         'selling_price' => $sellingPrice,
                         'unit' => 'PCS',
                         'type' => 'product',

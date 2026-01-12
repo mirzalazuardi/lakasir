@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
         Category::truncate();
 
         // Get sheet names from Excel file
-        $excelFile = base_path('LIST_HARGA_BARANG_JUAL.xlsx');
+        $excelFile = base_path('SISTEM.xlsx');
 
         if (file_exists($excelFile)) {
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
