@@ -58,7 +58,7 @@ trait TableProduct
                         ->columnStart(0),
                     TextColumn::make('name')
                         ->size('lg')
-                        ->searchable(['sku', 'name', 'barcode'])
+                        ->searchable(['sku', 'name'])
                         ->extraAttributes([
                             'class' => 'font-bold',
                         ]),
@@ -87,7 +87,7 @@ trait TableProduct
                 'xl' => 4,
             ])
             ->headerActionsPosition(HeaderActionsPosition::Bottom)
-            ->searchPlaceholder(__('Search (SKU, name, barcode)'))
+            ->searchPlaceholder(__('Search (SKU, name)'))
             ->actions([
                 Action::make('insert_amount')
                     ->translateLabel()

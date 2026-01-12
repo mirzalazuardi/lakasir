@@ -74,7 +74,7 @@ class ProductResource extends Resource
                     ->searchable(),
                 TextColumn::make('name')
                     ->translateLabel()
-                    ->searchable(['sku', 'name', 'barcode']),
+                    ->searchable(['sku', 'name']),
                 TextColumn::make('sku')
                     ->searchable()
                     ->toggleable()
