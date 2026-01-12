@@ -19,8 +19,26 @@ class CategorySeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
         }
         Category::truncate();
-        Category::create([
-            'name' => "UMUM"
-        ]);
+
+        // Get sheet names from Excel file
+        $excelFile = base_path('LIST_HARGA_BARANG_JUAL.xlsx');
+
+        if (file_exists($excelFile)) {
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
+            $spreadsheet = $reader->load($excelFile);
+            $sheetNames = $spreadsheet->getSheetNames();
+
+            // Create categories from sheet names
+            foreach ($sheetNames as $sheetName) {
+                Category::create([
+                    'name' => $sheetName
+                ]);
+            }
+        } else {
+            // Fallback to default category if Excel file doesn't exist
+            Category::create([
+                'name' => "UMUM"
+            ]);
+        }
     }
 }
